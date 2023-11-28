@@ -77,17 +77,20 @@ function M.open_tinker()
 	-- Set the current working directory for the buffer
 	vim.api.nvim_set_current_dir(vim.fn.getcwd())
 
-	-- Attach LSP to the buffer
-	vim.api.nvim_buf_attach(php_bufnr, false, {
-		on_exit = function(_, _, _)
-			-- Force-close the buffer without saving changes
-			vim.api.nvim_buf_delete(php_bufnr, { force = true })
-		end,
-	})
-
 	vim.api.nvim_buf_set_option(php_bufnr, "buflisted", false)
 
+	vim.api.nvim_buf_set_keymap(
+		php_bufnr,
+		"n",
+		"<Leader>t",
+		[[:lua require('laravelTinker').run_laravel_tinker()<CR>]],
+		{ noremap = true, silent = true }
+	)
+
 	vim.cmd("vsp " .. php_filename)
+
+	-- Attach LSP to the buffer
+	vim.api.nvim_buf_attach(php_bufnr, false, {})
 
 	return php_bufnr
 end

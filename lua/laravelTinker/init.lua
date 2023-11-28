@@ -83,12 +83,11 @@ function M.open_tinker1()
 
 	vim.cmd("vsp | b" .. php_bufnr)
 
-	-- Attach LSP to the buffer explicitly
-	local lsp = vim.lsp
-	local lsp_config = require("lspconfig")
-	local lsp_client_name = "php" -- Change this to the appropriate LSP client name for PHP
-
-	lsp.buf_attach_client(php_bufnr, lsp_client_name)
+	-- Attach LSP to the buffer
+	vim.api.nvim_buf_attach(php_bufnr, false, {
+		on_attach = function(client)
+		end,
+	})
 
 	return php_bufnr
 end

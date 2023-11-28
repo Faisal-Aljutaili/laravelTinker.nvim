@@ -44,7 +44,7 @@ function M.open_tinker()
     vim.api.nvim_buf_set_option(php_bufnr, 'filetype', 'php')
     vim.api.nvim_buf_set_option(php_bufnr, 'buftype', 'nofile')
     vim.api.nvim_buf_set_option(php_bufnr, 'swapfile', false)
-    vim.api.nvim_buf_set_option(php_bufnr, 'modifiable', false)
+    vim.api.nvim_buf_set_option(php_bufnr, 'modifiable', true)  -- Allow writing to the buffer
 
     vim.api.nvim_buf_set_name(php_bufnr, 'tinker.php')  -- Change the buffer name
 

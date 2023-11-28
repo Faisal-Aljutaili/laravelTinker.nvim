@@ -63,4 +63,33 @@ function M.open_tinker()
 	return php_bufnr
 end
 
+function M.open_tinker1()
+	local php_bufnr = vim.api.nvim_create_buf(true, false)
+
+	vim.api.nvim_buf_set_option(php_bufnr, "filetype", "php")
+	vim.api.nvim_buf_set_option(php_bufnr, "buftype", "nofile")
+	vim.api.nvim_buf_set_option(php_bufnr, "swapfile", false)
+	vim.api.nvim_buf_set_option(php_bufnr, "modifiable", true) -- Allow writing to the buffer
+
+	vim.api.nvim_buf_set_name(php_bufnr, "tinker.php") -- Change the buffer name
+
+	vim.api.nvim_buf_set_keymap(
+		php_bufnr,
+		"n",
+		"<Leader>t",
+		[[:lua require('laravelTinker').run_laravel_tinker()<CR>]],
+		{ noremap = true, silent = true }
+	)
+
+	vim.cmd("vsp | b" .. php_bufnr)
+
+	-- Attach LSP to the buffer explicitly
+	local lsp = vim.lsp
+	local lsp_config = require("lspconfig")
+	local lsp_client_name = "php" -- Change this to the appropriate LSP client name for PHP
+
+	lsp.buf_attach_client(php_bufnr, lsp_client_name)
+
+	return php_bufnr
+end
 return M

@@ -24,4 +24,18 @@ function M.run_laravel_tinker()
 	}
 end
 
+function M.open_tinker()
+    local php_bufnr = vim.api.nvim_create_buf(true, false)
+
+    vim.api.nvim_buf_set_option(php_bufnr, 'filetype', 'php')
+
+    vim.api.nvim_buf_set_name(php_bufnr, 'untitled.php')
+
+    vim.api.nvim_buf_set_keymap(php_bufnr, 'n', '<Leader>t', [[:lua require('laravelTinker').run_laravel_tinker()<CR>]], { noremap = true, silent = true })
+
+    vim.cmd('vsp | b' .. php_bufnr)
+
+    return php_bufnr
+end
+
 return M

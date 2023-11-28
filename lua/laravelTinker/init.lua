@@ -37,12 +37,16 @@ function M.run_laravel_tinker()
     }
 end
 
+
 function M.open_tinker()
     local php_bufnr = vim.api.nvim_create_buf(true, false)
 
     vim.api.nvim_buf_set_option(php_bufnr, 'filetype', 'php')
+    vim.api.nvim_buf_set_option(php_bufnr, 'buftype', 'nofile')
+    vim.api.nvim_buf_set_option(php_bufnr, 'swapfile', false)
+    vim.api.nvim_buf_set_option(php_bufnr, 'modifiable', false)
 
-    vim.api.nvim_buf_set_name(php_bufnr, 'untitled.php')
+    vim.api.nvim_buf_set_name(php_bufnr, 'tinker.php')  -- Change the buffer name
 
     vim.api.nvim_buf_set_keymap(php_bufnr, 'n', '<Leader>t', [[:lua require('laravelTinker').run_laravel_tinker()<CR>]], { noremap = true, silent = true })
 

@@ -64,7 +64,7 @@ function M.open_tinker()
 end
 
 function M.open_tinker1()
-	local php_filename = vim.fn.tempname() .. "/tinker.php"
+	local php_filename = "tinker.php"
 	local php_bufnr = vim.api.nvim_create_buf(true, false)
 
 	vim.api.nvim_buf_set_option(php_bufnr, "filetype", "php")
@@ -73,6 +73,9 @@ function M.open_tinker1()
 	vim.api.nvim_buf_set_option(php_bufnr, "modifiable", true) -- Allow writing to the buffer
 
 	vim.api.nvim_buf_set_name(php_bufnr, php_filename) -- Change the buffer name
+
+	-- Set the current working directory for the buffer
+	vim.api.nvim_set_current_dir(vim.fn.getcwd())
 
 	vim.api.nvim_buf_set_keymap(
 		php_bufnr,
@@ -89,5 +92,4 @@ function M.open_tinker1()
 
 	return php_bufnr
 end
-
 return M

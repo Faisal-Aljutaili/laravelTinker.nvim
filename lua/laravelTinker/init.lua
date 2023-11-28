@@ -8,8 +8,8 @@ function M.run_laravel_tinker()
 
     local float_opts = {
         relative = 'cursor',
-        width = 0.8,
-        height = 0.8,
+        width = 1.0,
+        height = 1.0,
         row = 1, col = 1,
         border = 'single',
     }

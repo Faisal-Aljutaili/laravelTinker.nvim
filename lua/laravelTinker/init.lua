@@ -1,19 +1,13 @@
 local M = {}
 
 function M.run_laravel_tinker()
-	local php_code = vim.fn.getline(".") -- Get the current line
-
-	-- Use a temporary file path
+	local php_code = vim.fn.getline(".")
 	local temp_file = vim.fn.tempname() .. ".php"
-
-	-- Write the PHP code to the temporary file
 	vim.fn.writefile({ php_code }, temp_file)
 
-	-- Run Laravel Tinker with the temporary file
 	local command = string.format("php artisan tinker < %s", temp_file)
 	local output = vim.fn.system(command)
 
-	-- Display the output in a floating window
 	local float_opts = {
 		relative = "cursor",
 		width = math.floor(vim.fn.winwidth(0) * 0.8),
@@ -26,16 +20,17 @@ function M.run_laravel_tinker()
 	local bufnr = vim.api.nvim_create_buf(false, true)
 	vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, vim.fn.split(output, "\n"))
 	local win_id = vim.api.nvim_open_win(bufnr, true, float_opts)
-	vim.api.nvim_exec(
-		[[
-        augroup LaravelTinkerFloat
-            autocmd!
-            autocmd WinEnter <buffer> nnoremap <silent> q :q<CR>
-            autocmd WinEnter <buffer> nnoremap <silent> <Esc> :q<CR>
-        augroup END
-    ]],
-		false
-	)
+
+	-- Set up mappings to close the window
+	local close_mappings = {
+		["q"] = "<Cmd>q<CR>",
+		["<Esc>"] = "<Cmd>q<CR>",
+	}
+
+	for key, mapping in pairs(close_mappings) do
+		vim.api.nvim_buf_set_keymap(bufnr, "n", key, mapping, { noremap = true, silent = true })
+	end
+
 	-- Clean up: delete the temporary file
 	vim.fn.delete(temp_file)
 

@@ -12,9 +12,8 @@ A Neovim plugin for running Laravel Tinker in a floating window.
 
 Install using your favorite plugin manager. For example, using Lazy:
 
-    ```
     {"Faisal-Aljutaili/laravelTinker.nvim"}
-    ```
+    
 
 ## Usage
 

@@ -85,7 +85,8 @@ function M.open_tinker1()
 
 	-- Attach LSP to the buffer
 	vim.api.nvim_buf_attach(php_bufnr, false, {})
-
+ -- Manually trigger LSP setup for the PHP filetype
+  vim.lsp.buf_attach_client(php_bufnr, 'intelephense')
 	return php_bufnr
 end
 return M

@@ -64,6 +64,7 @@ function M.open_tinker()
 end
 
 function M.open_tinker1()
+	local php_filename = vim.fn.tempname() .. "/tinker.php" -- Using "/tinker.php" as the file name
 	local php_bufnr = vim.api.nvim_create_buf(true, false)
 
 	vim.api.nvim_buf_set_option(php_bufnr, "filetype", "php")
@@ -71,7 +72,7 @@ function M.open_tinker1()
 	vim.api.nvim_buf_set_option(php_bufnr, "swapfile", false)
 	vim.api.nvim_buf_set_option(php_bufnr, "modifiable", true) -- Allow writing to the buffer
 
-	vim.api.nvim_buf_set_name(php_bufnr, "tinker.php") -- Change the buffer name
+	vim.api.nvim_buf_set_name(php_bufnr, php_filename) -- Change the buffer name
 
 	vim.api.nvim_buf_set_keymap(
 		php_bufnr,
@@ -81,12 +82,12 @@ function M.open_tinker1()
 		{ noremap = true, silent = true }
 	)
 
-	vim.cmd("vsp | b" .. php_bufnr)
+	vim.cmd("vsp " .. php_filename)
 
 	-- Attach LSP to the buffer
 	vim.api.nvim_buf_attach(php_bufnr, false, {})
- -- Manually trigger LSP setup for the PHP filetype
-  vim.lsp.buf_attach_client(php_bufnr, 'intelephense')
+
 	return php_bufnr
 end
+
 return M

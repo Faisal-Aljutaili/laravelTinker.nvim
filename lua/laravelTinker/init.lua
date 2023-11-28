@@ -40,7 +40,7 @@ function M.run_laravel_tinker()
 	}
 end
 
-function M.open_tinker()
+function M.open_tinker_nofile()
 	local php_bufnr = vim.api.nvim_create_buf(true, false)
 
 	vim.api.nvim_buf_set_option(php_bufnr, "filetype", "php")
@@ -63,7 +63,7 @@ function M.open_tinker()
 	return php_bufnr
 end
 
-function M.open_tinker1()
+function M.open_tinker()
 	local php_filename = "tinker.php"
 	local php_bufnr = vim.api.nvim_create_buf(true, false)
 
@@ -76,6 +76,8 @@ function M.open_tinker1()
 
 	-- Set the current working directory for the buffer
 	vim.api.nvim_set_current_dir(vim.fn.getcwd())
+
+	vim.api.nvim_buf_set_option(php_bufnr, "buflisted", false)
 
 	vim.api.nvim_buf_set_keymap(
 		php_bufnr,

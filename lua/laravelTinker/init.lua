@@ -22,8 +22,10 @@ function M.run_laravel_tinker()
 
 	local bufnr = vim.api.nvim_create_buf(false, true)
 
-	-- Split the output into lines and set each line separately in the buffer
+	-- Split the output into lines and exclude the first line
 	local output_lines = vim.split(output, "\n")
+	table.remove(output_lines, 1)
+
 	vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, output_lines)
 
 	local win_id = vim.api.nvim_open_win(bufnr, true, float_opts)

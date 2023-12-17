@@ -1,7 +1,7 @@
 local M = {}
 
 function M.run_laravel_tinker()
-	local file_path = vim.fn.tempname() .. ".php"
+	local _, file_path = vim.fn.tempfile(".php")
 	local php_code = table.concat({
 		"<?php",
 		vim.fn.getline(1, "$"),

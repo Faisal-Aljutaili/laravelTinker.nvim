@@ -1,8 +1,8 @@
 local M = {}
 
 function M.run_laravel_tinker()
-	local file_path = vim.fn.expand("%:p")
-	local file_content = vim.fn.readfile(file_path)
+	-- Get all lines from the current buffer
+	local file_content = vim.fn.getline(1, "$")
 	local content = table.concat(file_content, "\n")
 
 	local command = string.format("php artisan tinker <<< '%s'", content)

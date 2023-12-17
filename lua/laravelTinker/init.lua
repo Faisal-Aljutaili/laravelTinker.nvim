@@ -5,7 +5,10 @@ function M.run_laravel_tinker()
 	local file_content = vim.fn.getline(1, "$")
 	local content = table.concat(file_content, "\n")
 
-	local command = string.format("php artisan tinker <<< '%s'", content)
+	-- Escape the content for use in the shell command
+	local escaped_content = vim.fn.shellescape(content)
+
+	local command = string.format("php artisan tinker <<< %s", escaped_content)
 	local output = vim.fn.system(command)
 
 	local float_opts = {

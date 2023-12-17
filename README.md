@@ -16,12 +16,12 @@ Install using your favorite plugin manager. For example, using Lazy:
     
 
 ## Usage
-
 ### Run Laravel Tinker
 To run the content of the current file run:
 ```command
 :lua require('laravelTinker').run_laravel_tinker()
 ```
+*note that the first line of the file will be ignored*
 
 to open a tinker buffer run the command:
 ```command

@@ -1,11 +1,8 @@
 local M = {}
 
 function M.run_laravel_tinker()
-	local php_code = vim.fn.getline(".")
-	local temp_file = vim.fn.tempname() .. ".php"
-	vim.fn.writefile({ php_code }, temp_file)
-
-	local command = string.format("php artisan tinker < %s", temp_file)
+	local file_path = vim.fn.expand("%:p")
+	local command = string.format("php artisan tinker < %s", file_path)
 	local output = vim.fn.system(command)
 
 	local float_opts = {
@@ -18,7 +15,8 @@ function M.run_laravel_tinker()
 	}
 
 	local bufnr = vim.api.nvim_create_buf(false, true)
-	vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, vim.fn.split(output, "\n"))
+	vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, { output }) -- Set the entire output as one line
+
 	local win_id = vim.api.nvim_open_win(bufnr, true, float_opts)
 
 	-- Set up mappings to close the window
@@ -30,9 +28,6 @@ function M.run_laravel_tinker()
 	for key, mapping in pairs(close_mappings) do
 		vim.api.nvim_buf_set_keymap(bufnr, "n", key, mapping, { noremap = true, silent = true })
 	end
-
-	-- Clean up: delete the temporary file
-	vim.fn.delete(temp_file)
 
 	return {
 		bufnr = bufnr,
@@ -48,7 +43,8 @@ function M.open_tinker_nofile()
 	vim.api.nvim_buf_set_option(php_bufnr, "swapfile", false)
 	vim.api.nvim_buf_set_option(php_bufnr, "modifiable", true) -- Allow writing to the buffer
 
-	vim.api.nvim_buf_set_name(php_bufnr, "tinker.php") -- Change the buffer name
+	-- Set the content of the buffer
+	vim.api.nvim_buf_set_lines(php_bufnr, 0, -1, false, { "<?php" })
 
 	vim.api.nvim_buf_set_keymap(
 		php_bufnr,
@@ -71,6 +67,9 @@ function M.open_tinker()
 	vim.api.nvim_buf_set_option(php_bufnr, "buftype", "")
 	vim.api.nvim_buf_set_option(php_bufnr, "swapfile", false)
 	vim.api.nvim_buf_set_option(php_bufnr, "modifiable", true) -- Allow writing to the buffer
+
+	-- Set the content of the buffer
+	vim.api.nvim_buf_set_lines(php_bufnr, 0, -1, false, { "<?php" })
 
 	vim.api.nvim_buf_set_name(php_bufnr, php_filename) -- Change the buffer name
 

@@ -3,20 +3,17 @@ local M = {}
 function M.run_laravel_tinker()
 	-- Get all lines from the current buffer
 	local file_content = vim.fn.getline(1, "$")
+
+	-- Exclude the first line (if present)
+	table.remove(file_content, 1)
+
 	local content = table.concat(file_content, "\n")
 
-	-- Create a temporary file to store the content
-	local temp_file = vim.fn.tempname()
-	local temp_file_cmd = temp_file .. ".php"
+	-- Escape the content for use in the shell command
+	local escaped_content = vim.fn.shellescape(content)
 
-	-- Write the content to the temporary file
-	vim.fn.writefile({ content }, temp_file_cmd)
-
-	local command = string.format("php artisan tinker < %s", vim.fn.shellescape(temp_file_cmd))
+	local command = string.format("php artisan tinker <<< %s", escaped_content)
 	local output = vim.fn.system(command)
-
-	-- Remove the temporary file
-	vim.fn.delete(temp_file_cmd)
 
 	local float_opts = {
 		relative = "cursor",

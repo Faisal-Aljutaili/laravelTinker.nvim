@@ -21,7 +21,10 @@ function M.run_laravel_tinker()
 	}
 
 	local bufnr = vim.api.nvim_create_buf(false, true)
-	vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, { output }) -- Set the entire output as one line
+
+	-- Split the output into lines and set each line separately in the buffer
+	local output_lines = vim.split(output, "\n")
+	vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, output_lines)
 
 	local win_id = vim.api.nvim_open_win(bufnr, true, float_opts)
 

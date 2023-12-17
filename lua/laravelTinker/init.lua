@@ -1,9 +1,16 @@
 local M = {}
 
 function M.run_laravel_tinker()
-	local file_path = vim.fn.expand("%:p")
-	local command = string.format("php artisan tinker < %s", file_path)
-	local output = vim.fn.system(command)
+	local file_path = vim.fn.tempname() .. ".php"
+	local php_code = table.concat({
+		"<?php",
+		vim.fn.getline(1, "$"),
+	}, "\n")
+
+	vim.fn.writefile({ php_code }, file_path)
+
+	local command = string.format("php artisan tinker < %s", vim.fn.shellescape(file_path))
+	local output = vim.fn.systemlist(command)
 
 	local float_opts = {
 		relative = "cursor",
@@ -15,8 +22,7 @@ function M.run_laravel_tinker()
 	}
 
 	local bufnr = vim.api.nvim_create_buf(false, true)
-	vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, { output }) -- Set the entire output as one line
-
+	vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, output)
 	local win_id = vim.api.nvim_open_win(bufnr, true, float_opts)
 
 	-- Set up mappings to close the window
@@ -28,6 +34,9 @@ function M.run_laravel_tinker()
 	for key, mapping in pairs(close_mappings) do
 		vim.api.nvim_buf_set_keymap(bufnr, "n", key, mapping, { noremap = true, silent = true })
 	end
+
+	-- Clean up: delete the temporary file
+	vim.fn.delete(file_path)
 
 	return {
 		bufnr = bufnr,

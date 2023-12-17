@@ -19,9 +19,8 @@ Install using your favorite plugin manager. For example, using Lazy:
 ### Run Laravel Tinker
 To run the content of the current file run:
 ```command
-:lua require('laravelTinker').run_laravel_tinker()
+:lua require('laravelTinker').run_file_in_laravel_tinker()
 ```
-*note that the first line of the file will be ignored*
 
 to open a tinker buffer run the command:
 ```command
@@ -29,6 +28,8 @@ to open a tinker buffer run the command:
 ```
 then to run the buffer press:
 ```<leader>t```
+*note that the first line of the file will be ignored*
+
 or run the previous command to run the content of the file.
 but this command will show an error "no write since last change on tinker.php",
 if you don't want this error you can use this command to run a nofile buffer:
